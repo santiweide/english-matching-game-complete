@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>英语单词消消乐</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366f1',
+            secondary: '#ec4899',
+            accent: '#8b5cf6',
+          },
+          fontFamily: { game: ['"Comic Sans MS"', '"Marker Felt"', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto { content-visibility: auto; }
+      .oval { border-radius: 50%; }
+      .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      .pop { transform-origin: center; animation: pop 0.3s ease-out; }
+      .fade-out { animation: fadeOut 0.5s ease-out forwards; }
+      .celebrate { animation: celebrate 0.5s ease-out forwards; }
+      .shine { position: relative; overflow: hidden; }
+      .shine::after {
+        content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+        background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+        transform: rotate(30deg); animation: shine 3s infinite;
+      }
+    }
+    @keyframes pop { 0%{transform:scale(0);} 70%{transform:scale(1.1);} 100%{transform:scale(1);} }
+    @keyframes fadeOut { 0%{opacity:1;transform:scale(1);} 100%{opacity:0;transform:scale(0);} }
+    @keyframes celebrate { 0%{transform:scale(0.5);opacity:0;} 50%{transform:scale(1.2);opacity:1;} 100%{transform:scale(1);opacity:1;} }
+    @keyframes shine { 0%{transform:translateX(-100%) rotate(30deg);} 100%{transform:translateX(100%) rotate(30deg);} }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 to-purple-100 min-h-screen font-game text-gray-800">
+  <div class="container mx-auto px-4 py-8 max-w-3xl">
+    <header class="text-center mb-8">
+      <h1 class="text-[clamp(2rem,5vw,3rem)] font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-2 text-shadow shine">
+        英语单词消消乐
+      </h1>
+      <div class="flex justify-center gap-8 text-lg font-semibold text-gray-600">
+        <div>关卡: <span id="level" class="text-primary">1</span></div>
+        <div>得分: <span id="score" class="text-secondary">0</span></div>
+      </div>
+    </header>
+    <main class="mb-12">
+      <div id="game-board" class="grid grid-cols-4 gap-4 md:gap-6"></div>
+    </main>
+    <div class="text-center text-gray-500 text-sm">
+      <p>点击匹配英文单词和中文意思</p>
+    </div>
+  </div>
+
+  <div id="fireworks-container" class="fixed inset-0 pointer-events-none z-50"></div>
+
+  <div id="success-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 text-center shadow-2xl celebrate">
+      <div class="text-5xl mb-4 text-yellow-500">🎉</div>
+      <h2 class="text-2xl font-bold mb-2 text-gray-800">闯关成功！</h2>
+      <p class="text-gray-600 mb-6">恭喜你完成第 <span id="modal-level" class="font-bold text-primary">1</span> 关</p>
+      <button id="next-level-btn" class="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50">
+        下一关
+      </button>
+    </div>
+  </div>
+
+  <script type="module">
+    import LEVELS from './levels.js';
+    import { initGame, nextLevel } from './main.js';
+    // 初始化
+    initGame(LEVELS);
+    document.getElementById('next-level-btn').addEventListener('click', () => nextLevel(LEVELS));
+    window.addEventListener('DOMContentLoaded', () => initGame(LEVELS));
+  </script>
+</body>
+</html>
