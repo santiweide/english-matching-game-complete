@@ -1,5 +1,5 @@
 // levels.js
-// 每个关卡的英文单词（english）、中文解释（chinese）
+// id为第几关
 // 如需新增关卡，只需在数组末尾追加对象；不需要改动主逻辑。
 const LEVELS = [
   {
